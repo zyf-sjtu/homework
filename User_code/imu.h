@@ -13,6 +13,7 @@ class IMU
     void handleSensor(void);
     void updateQuaternion(void);
     bool hasfeedback(void);
+    void calibrate(void);
     private:
     const float R_imu_[3][3] = {{-1.0f, 0.0f, 0.0f},
                          {0.0f, 1.0f, 0.0f},
@@ -59,7 +60,6 @@ class IMU
     void getGyroAngles(void);
     void getAccAngles(void);
     void complementaryFilter(void);
-
 };
 
 #endif //IMU_IMU_H

@@ -10,6 +10,7 @@
 extern "C" {
 #endif
     void userCallback();
+    void userCalibrate();
 #ifdef __cplusplus
 }
 #endif

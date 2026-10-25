@@ -25,7 +25,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "bmi088.h"
-extern void userCallback(void);
+extern void userCalibrate();
+extern void userCallback();
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,6 +95,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   bmi088_init();
   HAL_TIM_Base_Start_IT(&htim6);
+  userCalibrate();
   /* USER CODE END 2 */
 
   /* Infinite loop */

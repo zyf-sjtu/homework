@@ -42,20 +42,6 @@ bool IMU::hasfeedback()
 {
     return received_;
 }
-uint8_t acc_data_[6];
-uint8_t gyro_data_[6];
-volatile uint8_t  ACC_Z_MSB_;
-volatile uint8_t  ACC_Y_MSB_;
-volatile uint8_t  ACC_X_MSB_;
-volatile uint8_t  ACC_Y_LSB_;
-volatile uint8_t  ACC_X_LSB_;
-volatile uint8_t  ACC_Z_LSB_;
-volatile uint8_t  RATE_Z_MSB_;
-volatile uint8_t  RATE_Y_MSB_;
-volatile uint8_t  RATE_X_MSB_;
-volatile uint8_t  RATE_Y_LSB_;
-volatile uint8_t  RATE_X_LSB_;
-volatile uint8_t  RATE_Z_LSB_;
 void IMU::decode()
 {
     received_=true;
@@ -177,7 +163,26 @@ void IMU::updateQuaternion()
 
 void IMU::complementaryFilter()
 {
-    yaw_=yaw_gyro_;
+    yaw_+=gyro_sensor_[2]*dt_;
     pitch_=alpha_*(pitch_+dt_*gyro_sensor_[1])+(1-alpha_)*pitch_accel_;
     roll_=alpha_*(roll_+dt_*gyro_sensor_[0])+(1-alpha_)*roll_accel_;
+}
+
+void IMU::calibrate()
+{
+    float sum_x=0.0, sum_y=0.0 ,sum_z=0.0;
+
+    for (uint16_t i = 0; i < 2000; i++)
+    {
+        decode();
+        calc();
+        sensorDataTransform();
+        sum_x += gyro_sensor_[0];
+        sum_y += gyro_sensor_[1];
+        sum_z += gyro_sensor_[2];
+        HAL_Delay(1);
+    }
+    gyro_bias_[0]=sum_x/2000.0f;
+    gyro_bias_[1]=sum_y/2000.0f;
+    gyro_bias_[2]=sum_z/2000.0f;
 }

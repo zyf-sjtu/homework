@@ -12,3 +12,8 @@ extern "C" void userCallback()
     imu.handleSensor();
     imu.updateQuaternion();
 }
+
+extern "C" void userCalibrate()
+{
+    imu.calibrate();
+}
